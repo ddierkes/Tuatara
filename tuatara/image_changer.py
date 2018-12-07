@@ -1,5 +1,3 @@
-import collections, shutil
-
 from PIL import Image, ImageOps
 
 
@@ -29,9 +27,9 @@ def main(filepath, region, size, rotation, quality, format):
         pass
     elif region == "square":
         if width > height:
-            img = ImageOps.fit(img, (height,height))
+            img = ImageOps.fit(img, (height, height))
         elif height > width:
-            img = ImageOps.fit(img, (width,width))
+            img = ImageOps.fit(img, (width, width))
         else:
             pass
     elif region.startswith("pct:"):
@@ -43,8 +41,9 @@ def main(filepath, region, size, rotation, quality, format):
             bottom = int(top + (float(d)/100)*height)
             boxtup = (left, top, right, bottom)
             img = img.crop(boxtup)
-        except:
-            return False, "The percent values entered as a region are incorrectly formatted"
+        except Exception:
+            return False, ("The percent values entered as a region are "
+                           "incorrectly formatted")
 
     else:
         try:
@@ -56,7 +55,7 @@ def main(filepath, region, size, rotation, quality, format):
             bottom = int(top + float(d))
             boxtup = (left, top, right, bottom)
             img = img.crop(boxtup)
-        except:
+        except Exception:
             return False, "The region input is incorrectly formatted"
 
     # Size ==============================================
@@ -78,7 +77,10 @@ def main(filepath, region, size, rotation, quality, format):
     elif size.startswith("pct:"):
         sizeValues = size[4:].split(',')
         if int(sizeValues[0]) < 101 and int(sizeValues[1]) < 101:
-            sizetup = (int(width*(float(sizeValues[0])/100)), int(height*(float(sizeValues[1])/100)))
+            sizetup = (
+                int(width*(float(sizeValues[0])/100)),
+                int(height*(float(sizeValues[1])/100))
+            )
             img = img.resize(sizetup)
         else:
             return False, "Size percentages are too big"
@@ -87,13 +89,13 @@ def main(filepath, region, size, rotation, quality, format):
         if sizeValues[0] == "":
             scalePercent = float(sizeValues[1])/height
             newWidth = int(width*scalePercent)
-            sizetup =(newWidth, int(sizeValues[1]))
+            sizetup = (newWidth, int(sizeValues[1]))
         elif sizeValues[1] == "":
             scalePercent = float(sizeValues[0])/width
             newHeight = int(height*scalePercent)
-            sizetup =(int(sizeValues[0]), newHeight)
+            sizetup = (int(sizeValues[0]), newHeight)
         else:
-            sizetup =(int(sizeValues[0]), int(sizeValues[1]))
+            sizetup = (int(sizeValues[0]), int(sizeValues[1]))
         if sizeCorrect:
             sizetup = dimensional_corrector(ratio, sizetup)
         img = img.resize(sizetup)
@@ -104,7 +106,7 @@ def main(filepath, region, size, rotation, quality, format):
         rotation = rotation[1:]
     try:
         rotation = -float(rotation)
-    except:
+    except Exception:
         # probably input a string
         return False, "The rotation value should be a number"
     img = img.rotate(int(rotation))
@@ -120,7 +122,8 @@ def main(filepath, region, size, rotation, quality, format):
         pass
     else:
         # return bad 400
-        return False, f"the request for a {quality} quality image is unavailable"
+        return False, (f"the request for a {quality} quality image is "
+                       "unavailable")
 
     # Format ================================================
     print(filepath)
@@ -144,6 +147,5 @@ def main(filepath, region, size, rotation, quality, format):
         img.save(newfilepath, "PDF", resolution=100.0)
     else:
         return False, "An unacceptable file format has been requested"
-
 
     return True, newfilepath

@@ -1,7 +1,7 @@
-import pathlib
-import json, tempfile, shutil, os
+import shutil
+import tempfile
 
-from flask import Flask, send_file, jsonify, redirect, url_for, abort, render_template, send_from_directory
+import flask
 import pkg_resources
 
 from . import image_changer
@@ -9,7 +9,7 @@ from . import image_path_finder
 from . import image_info_finder
 from . import cors_workaround
 
-app = Flask(__package__)
+app = flask.Flask(__package__)
 
 crossdomain = cors_workaround.crossdomain
 
@@ -23,43 +23,50 @@ mimetypes = {
     'webp': 'image/webp'
 }
 
-##### Outside of Spec
+# #### Outside of Spec
+
+
 @app.route("/")
 def hello_world():
     return "yoy"
 
+
 @app.route("/robots.txt")
 def go_away():
-    return send_from_directory(
+    return flask.send_from_directory(
         pkg_resources.resource_filename(__package__, 'static'),
         'robots.txt')
 
+
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(
+    return flask.send_from_directory(
         pkg_resources.resource_filename(__package__, 'static'),
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon')
+
 
 @app.route("/<filename>/file")
 def get_image(filename):
     """Provides the original image without the IIIF wrapping"""
     filename = image_path_finder.main(filename)
-    return send_file(filename, mimetype="image/jpg")
+    return flask.send_file(filename, mimetype="image/jpg")
 
 
+# #### Official Spec
 
-##### Official Spec
+
 @app.route("/<filename>")
 @crossdomain(origin="*")
 def direct_to_info(filename):
     """
     From 2.1:
-    When the base URI is dereferenced, the interaction should result in the image
-    information document. It is recommended that the response be a 303 status
-    redirection to the image information document’s URI.
+    When the base URI is dereferenced, the interaction should result in the
+    image information document. It is recommended that the response be a 303
+    status redirection to the image information document’s URI.
     """
-    return redirect(url_for("get_info", filename=filename), code=303)
+    return flask.redirect(
+        flask.url_for("get_info", filename=filename), code=303)
 
 
 @app.route("/<filename>/info.json")
@@ -68,7 +75,7 @@ def get_info(filename):
     filepath = image_path_finder.main(filename)
     info = image_info_finder.main(filename, filepath)
     # info = json.dumps(info)
-    return jsonify(info)
+    return flask.jsonify(info)
 
 
 @app.route("/<filename>/<region>/<size>/<rotation>/<quality>")
@@ -79,36 +86,42 @@ def get_derivative(filename, region, size, rotation, quality):
     with tempfile.TemporaryDirectory() as tmpdirname:
         try:
             shutil.copy(filepath, tmpdirname)
-        except:
-            abort(404)
+        except Exception:
+            flask.abort(404)
         newPath = tmpdirname + "/" + filename + ".jpg"
-        proceed, path_or_error = image_changer.main(newPath, region, size, rotation, quality, format)
+        proceed, path_or_error = image_changer.main(
+            newPath, region, size, rotation, quality, format)
         if proceed:
             if format in mimetypes:
-                return send_file(path_or_error, mimetype=mimetypes[format])
+                return flask.send_file(
+                    path_or_error, mimetype=mimetypes[format])
             else:
-                abort(400, description="File format is unacceptable")
+                flask.abort(400, description="File format is unacceptable")
         else:
             print("NOW PRINTING ERROR MESSGAGE")
             print(path_or_error)
-            abort(400, description=path_or_error)
+            flask.abort(400, description=path_or_error)
 
 
-#### error handling
+# ### error handling
+
+
 @app.errorhandler(400)
 @crossdomain(origin="*")
 def bad_request(e):
-    return render_template('400.html', message=e.description), 400
+    return flask.render_template('400.html', message=e.description), 400
+
 
 @app.errorhandler(404)
 @crossdomain(origin="*")
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return flask.render_template('404.html'), 404
+
 
 @app.errorhandler(500)
 @crossdomain(origin="*")
 def server_error(e):
-    return render_template('500.html'), 500
+    return flask.render_template('500.html'), 500
 
 
 def main():

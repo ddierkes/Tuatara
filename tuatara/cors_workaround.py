@@ -2,6 +2,7 @@ from datetime import timedelta
 from functools import update_wrapper
 from flask import request, make_response, current_app
 
+
 def crossdomain(
     origin=None,
     methods=None,
@@ -12,9 +13,10 @@ def crossdomain(
 ):
     """
     2.1 spec
-    Servers should send the Access-Control-Allow-Origin header with the value * in
-    response to information requests.  This header is required in order to allow the JSON 
-    responses to be used by Web applications hosted on different servers.
+    Servers should send the Access-Control-Allow-Origin header with the value *
+    in response to information requests.  This header is required in order to
+    allow the JSON responses to be used by Web applications hosted on different
+    servers.
     """
     if methods is not None:
         methods = ", ".join(sorted(x.upper() for x in methods))
@@ -47,7 +49,7 @@ def crossdomain(
             h["Access-Control-Allow-Origin"] = origin
             h["Access-Control-Allow-Methods"] = get_methods()
             h["Access-Control-Max-Age"] = str(max_age)
-            h["Access-Control-Allow-Headers"] = "cache-control, pragma"  # headers
+            h["Access-Control-Allow-Headers"] = "cache-control, pragma"
             # if headers is not None:
             #    h['Access-Control-Allow-Headers'] = headers
             return resp
