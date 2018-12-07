@@ -3,10 +3,10 @@ import json, tempfile, shutil, os
 
 from flask import Flask, send_file, jsonify, redirect, url_for, abort, render_template, send_from_directory
 
-import image_changer
-import image_path_finder
-import image_info_finder
-import cors_workaround
+from . import image_changer
+from . import image_path_finder
+from . import image_info_finder
+from . import cors_workaround
 
 app = Flask(__name__)
 
