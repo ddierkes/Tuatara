@@ -16,4 +16,5 @@ RUN apk add --no-cache jpeg zlib && \
     pip install --no-cache-dir /tmp/dist/*whl && \
     apk del .dev && \
     rm -rf /tmp/dist
-VOLUME /app/images
+ENV TUATARA_IMAGE_PATH=/images
+VOLUME /images

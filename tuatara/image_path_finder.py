@@ -1,6 +1,9 @@
+import os
 import pathlib
 
-IMAGE_DIRECTORY = pathlib.Path.cwd().joinpath('images')
+IMAGE_DIRECTORY = pathlib.Path(
+    os.environ.get('TUATARA_IMAGE_PATH', pathlib.Path.cwd().joinpath('images'))
+)
 
 
 def main(filename):
