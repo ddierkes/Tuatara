@@ -1,5 +1,7 @@
-from .config import image_directory
+import pathlib
+
+IMAGE_DIRECTORY = pathlib.Path.cwd().joinpath('images')
+
 
 def main(filename):
-    filename = image_directory + filename + '.jpg'
-    return filename
+    return IMAGE_DIRECTORY.joinpath(filename).with_suffix('.jpg')
