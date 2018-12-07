@@ -13,14 +13,15 @@ app = Flask(__package__)
 
 crossdomain = cors_workaround.crossdomain
 
-mimetypes = {}
-mimetypes["jpg"] = "image/jpeg"
-mimetypes["tif"] = "image/tiff"
-mimetypes["png"] = "image/png"
-mimetypes["gif"] = "image/gif"
-mimetypes["jp2"] = "image/jp2"
-mimetypes["pdf"] = "application/pdf"
-mimetypes["webp"] = "image/webp"
+mimetypes = {
+    'gif': 'image/gif',
+    'jp2': 'image/jp2',
+    'jpg': 'image/jpeg',
+    'pdf': 'application/pdf',
+    'png': 'image/png',
+    'tif': 'image/tiff',
+    'webp': 'image/webp'
+}
 
 ##### Outside of Spec
 @app.route("/")
