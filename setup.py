@@ -13,6 +13,9 @@ setuptools.setup(
     url='https://github.com/ddierkes/Tuatara',
     license='MIT',
     packages=['tuatara'],
+    package_data={
+        'tuatara': ['static/*', 'templates/*']
+    },
     python_requires='>=3.7',
     install_requires=REPO.joinpath('requirements.txt').read_text(),
     entry_points={

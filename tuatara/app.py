@@ -1,7 +1,8 @@
+import pathlib
 import json, tempfile, shutil, os
 
-
 from flask import Flask, send_file, jsonify, redirect, url_for, abort, render_template, send_from_directory
+import pkg_resources
 
 from . import image_changer
 from . import image_path_finder
@@ -32,8 +33,10 @@ def go_away():
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(
+        pkg_resources.resource_filename(__package__, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon')
 
 @app.route("/<filename>/file")
 def get_image(filename):
