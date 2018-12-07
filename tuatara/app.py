@@ -29,7 +29,9 @@ def hello_world():
 
 @app.route("/robots.txt")
 def go_away():
-    return send_file("robots.txt")
+    return send_from_directory(
+        pkg_resources.resource_filename(__package__, 'static'),
+        'robots.txt')
 
 @app.route('/favicon.ico')
 def favicon():
