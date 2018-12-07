@@ -9,7 +9,7 @@ from . import image_path_finder
 from . import image_info_finder
 from . import cors_workaround
 
-app = Flask(__name__)
+app = Flask(__package__)
 
 crossdomain = cors_workaround.crossdomain
 
