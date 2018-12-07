@@ -1,3 +1,0 @@
-[console_scripts]
-tuatara = tuatara:main
-
