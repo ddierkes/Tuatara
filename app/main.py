@@ -24,7 +24,7 @@ mimetypes["webp"] = "image/webp"
 ##### Outside of Spec
 @app.route("/")
 def hello_world():
-    return "yoy"
+    return "Tuatara, named for a three eyed lizard that sees perhaps in color and bitonal, is a simple IIIF image server."
 
 @app.route("/robots.txt")
 def go_away():
