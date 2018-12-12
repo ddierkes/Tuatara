@@ -1,6 +1,6 @@
 # Tuatara, a IIIF Image Server
 
-Tuatara, named for a three eyed lizard that sees perhaps in color and bitonal, is a simple IIIF image server.  Put docker on your machine, clone it and build it.
+Tuatara, named for a three eyed lizard that sees perhaps in color and bitonal, is a simple [IIIF Image Server](https://iiif.io/).  Put docker on your machine, clone it and build it.
 
 ```
 git clone thisrepo
