@@ -6,3 +6,4 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 VOLUME /app/images
+VOLUME /app/data

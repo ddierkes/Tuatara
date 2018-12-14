@@ -75,8 +75,9 @@ def get_derivative(filename, region, size, rotation, quality):
         try:
             shutil.copy(filepath, tmpdirname)
         except:
+            print('failed to copy')
             abort(404)
-        newPath = tmpdirname + filepath[8:]
+        newPath = f"{tmpdirname}/{filepath.split('/')[-1]}"
         proceed, path_or_error = image_changer.main(newPath, region, size, rotation, quality, format)
         if proceed:
             if format in mimetypes:
