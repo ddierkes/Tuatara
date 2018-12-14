@@ -28,7 +28,8 @@ def hello_world():
 
 @app.route("/robots.txt")
 def go_away():
-    return send_file("robots.txt")
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'robots.txt', mimetype='text/plain')
 
 @app.route('/favicon.ico')
 def favicon():
