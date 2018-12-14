@@ -8,6 +8,6 @@ cd tuatara
 docker build -t tuatara .
 ```
 
-Then run the container at a port of your choosing (in this case 8888) to serve a directory of images of your choosing (in this case /var/www/tuatara/app/images)
+Then run the container at a port of your choosing (in this case 8888) to serve a directory of images of your choosing (in this case /var/www/tuatara/app/images) and an identifier to image path table from a directory mounted at /data.
 
-```docker run -v /var/www/tuatara/app/images:/app/images /var/www/tuatara/app/data:/app/data -p 8888:80 tuatara:latest```
+```docker run -v /var/www/tuatara/app/images:/app/images -v /var/www/tuatara/app/data:/app/data -p 8888:80 tuatara:latest```
