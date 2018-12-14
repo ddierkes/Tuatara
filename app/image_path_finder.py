@@ -1,5 +1,4 @@
-from config import image_directory
 
 def main(filename):
-    filename = image_directory + filename + '.jpg'
+    filename = './images/' + filename + '.jpg'
     return filename
